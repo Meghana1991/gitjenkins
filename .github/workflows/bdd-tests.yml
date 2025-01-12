@@ -3,11 +3,8 @@ name: Run BDD Test on PR
 on:
   pull_request:
     branches:
-      - '*' #Trigger only when the PR is made as main branch
-    types:
-      - opened
-      - edited
-      - synchronize
+      - main #Trigger only when the PR is made as main branch
+
 jobs:
   run-bdd-tests:
     runs-on: windows-latest
