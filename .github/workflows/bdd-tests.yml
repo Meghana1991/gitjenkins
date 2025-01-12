@@ -33,5 +33,5 @@ jobs:
         PR_DESCRIPTION=${curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }})
         #Extract tags from PR description
-         $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+" | ForEach-Object { $_.Line.Trim() }
+         $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+"
         npm run test:bdd -- --tags $TAGS
