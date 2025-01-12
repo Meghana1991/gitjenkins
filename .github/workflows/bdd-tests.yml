@@ -3,7 +3,7 @@ name: Run BDD Test on PR
 on:
   pull_request:
     branches:
-      - develop #Trigger only when the PR is made as main branch
+      - '*' #Trigger only when the PR is made as main branch
     types:
       - opened
       - edited
