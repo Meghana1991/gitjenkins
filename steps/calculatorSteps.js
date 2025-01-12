@@ -4,7 +4,7 @@ const Calculator = require('../calculator')
 let calculator;
 let result;
 
-const assert = require('assert')
+const assert = require('assert') 
 
 Given('the calculator is initialized', function () {
     calculator = new Calculator()
