@@ -36,9 +36,3 @@ jobs:
 
     - name: Run BDD Tests
       run: npx cucumber-js --tags "${{env.PR_DESCRIPTION}}" --publish-quiet
-
-    - name: Upload BDD test 
-      uses: actions/upload-artifact@v2
-      with:
-        name: bdd-report
-        path: ./bdd-reports
