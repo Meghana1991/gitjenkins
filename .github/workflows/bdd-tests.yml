@@ -5,9 +5,9 @@ on:
     branches:
       - main #Trigger only when the PR is made as main branch
     types:
-        - opened
-        - edited
-        - synchronize
+      - opened
+      - edited
+      - synchronize
 jobs:
   run-bdd-tests:
     runs-on: windows-latest
