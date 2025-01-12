@@ -1,3 +1,4 @@
+
 name: Run BDD Test on PR
 
 on:
@@ -24,11 +25,24 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    #Run BDD Tests with specified tag 
-    - name: Run BDD tests with tags
+    #Extract BDD tags
+    - name: Extract BDD tags
+      id: extract_tags
       run: |
-        PR_DESCRIPTION=${curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }})
-        #Extract tags from PR description
-         $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+" | ForEach-Object { $_.Line.Trim() }
-        npm run test:bdd -- --tags $TAGS
+      echo "Extracting BDD tags from description..."
+      TAGS=$(echo "${{ github.event.pull_request.body }}")
+      echo "BDD_TAGS=${TAGS}" >> $GITHUB_ENV
+
+
+    #Run BDD Tests with specified tag 
+    - name: Run BDD tests
+      if: env.BDD_TAGS != '' 
+      run: |
+        echo "Running BDD tests for tags: $BDD_TAGS"
+        npx cucumber-js --tags "$BDD_TAGS"
+
+    #Send email with test results
+    - name: Send email with test results
+      if: success()
+      run: |
+      echo "Sending email with BDD test results"
