@@ -29,9 +29,10 @@ jobs:
 
     #Run BDD Tests with specified tag 
     - name: Run BDD tests with tags
+      id: pr_description
       run: |
-        PR_DESCRIPTION=${curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }})
-        #Extract tags from PR description
-         $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+"
-        npm run test:bdd -- --tags $TAGS
+        $PR_BODY=${curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}" | jq -r .body )
+        Write-Host "PR_DESCRIPTION=$PR_BODY" | Out-File-FilePath $env:GITHUB_ENV -Append
+
+    - name: Run BDD Tests
+      run: npx cucumber-js --tags "${{env.PR_DESCRIPTION}}" --publish-quiet
