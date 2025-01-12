@@ -24,15 +24,6 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    #Extract BDD tags
-    - name: Extract BDD tags
-      id: extract_tags
-      run: |
-      echo "Extracting BDD tags from description..."
-      TAGS=$(echo "${{ github.event.pull_request.body }}")
-      echo "BDD_TAGS=${TAGS}" >> $GITHUB_ENV
-
-
     #Run BDD Tests with specified tag 
     - name: Run BDD tests
       if: env.BDD_TAGS != '' 
