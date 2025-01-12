@@ -32,8 +32,3 @@ jobs:
         #Extract tags from PR description
          $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+" | ForEach-Object { $_.Line.Trim() }
         npm run test:bdd -- --tags $TAGS
-    #Send email with test results
-    - name: Send email with test results
-      if: success()
-      run: |
-      echo "Sending email with BDD test results"
