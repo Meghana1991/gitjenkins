@@ -1,3 +1,4 @@
+
 name: Run BDD Test on PR
 
 on:
@@ -54,7 +55,7 @@ jobs:
         #Log the extracted description
         Write-Host "PR PR_BODY: $PR_BODY"
         Write-Host "PR Description: $PR_DESCRIPTION"
-        Write-Host "PR Description: ${{ env.PR_DESCRIPTION }}
+        Write-Host "PR Description: ${{ env.PR_DESCRIPTION }}"
 
         # Export PR Description to the environment
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
