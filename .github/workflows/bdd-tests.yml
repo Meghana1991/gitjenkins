@@ -78,10 +78,10 @@ jobs:
    #Send Email with BDD
     - name: Send BDD report via email
       run: |
-        $smtpServer = ${{ secrets.SMTP_SERVER }}
-        $smtpPort = ${{ secrets.SMTP_PORT }}
-        $smtpUser = ${{ secrets.SMTP_USER }}
-        $smtpPass = ${{ secrets.SMTP_PASSWORD }}
+        $smtpServer = "${{ secrets.SMTP_SERVER }}"
+        $smtpPort = "${{ secrets.SMTP_PORT }}"
+        $smtpUser = "${{ secrets.SMTP_USER }}"
+        $smtpPass = "${{ secrets.SMTP_PASSWORD }}"
         $from = $smtpServer
         $to = $smtpServer
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
