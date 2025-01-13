@@ -87,6 +87,9 @@ jobs:
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
         $attachmentPath = "cucumber-report.json"
+
+        Write-Host "From Address: $from"
+        Write-Host "From Address: $to"
         
         $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
         $smtp.EnableSsl = $true
