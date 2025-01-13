@@ -83,7 +83,7 @@ jobs:
         $smtpUser = $env:SMTP_USER
         $smtpPass = $env:SMTP_PASSWORD
         $from = $env:SMTP_USER
-        $to = meghana.anandk@gmail.com
+        $to = $env:SMTP_USER
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
         $attachmentPath = "cucumber-report.json"
