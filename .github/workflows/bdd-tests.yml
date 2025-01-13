@@ -37,24 +37,9 @@ jobs:
       id: fetch-pr-description
       run: |
         # Fetch the PR details using GitHub API
-        $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `"https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"`
+        $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `
+        "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"
         if ($LASTEXITCODE -ne 0) {
           Write-Host "Error"
           exit $LASTEXITCODE
         }
-        #Extract tags from PR description using jq
-        $PR_DESCRIPTION = ($PR_BODY | jq -r .body)
-
-        #Log the extracted description
-        Write-Host "PR Description: #PR_DESCRIPTION"
-
-        # Export PR Description to the environment
-        echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
-      shell: pwsh
-
-        #Run BDD Tests with specified tag 
-    - name: Run BDD tests
-      if: env.BDD_TAGS != '' 
-      run: |
-        echo "Running BDD tests for tags: $BDD_TAGS"
-        npx cucumber-js --tags "$BDD_TAGS"
