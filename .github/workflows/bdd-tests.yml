@@ -38,6 +38,11 @@ jobs:
       run: choco install jq
       continue-on-error: true
 
+    #Install cucumber
+    - name: Install Cucumber
+      run: npm install cucumber-js
+      continue-on-error: true
+
     #Get the PR description
     - name: Get the PR description
       id: fetch-pr-description
