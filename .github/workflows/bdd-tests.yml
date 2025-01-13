@@ -77,18 +77,24 @@ jobs:
       
    #Send Email with BDD
     - name: Send BDD report via email
-      uses: phillipjohnson/send-email@v1
-      with:
-          smtp-server: smtp.gmail.com
-          smtp-port: 587
-          smtp-user: ${{ secrets.SMTP_USER }}
-          smtp-password: ${{ secrets.SMTP_PASSWORD }}
-          from: ${{ secrets.SMTP_USER }}
-          to: meghana.anandk@gmail.com
-          subject: "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
-          body: |
-            Please find the BDD test results
-          attachments: cucumber-report.json
-
-
-#
+      run: |
+        $smtpServer = $env:SMTP_SERVER
+        $smtpPort = $env:SMTP_PORT
+        $smtpUser = $env:SMTP_USER
+        $smtpPass = $env:SMTP_PASSWORD
+        $from = $env:SMTP_USER
+        $to = meghana.anandk@gmail.com
+        $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
+        $body = "Please find the BDD test results"
+        $attachmentPath = "cucumber-report.json"
+        
+        $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
+        $smtp.EnableSsl = $true
+        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)
+        
+        $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
+        $attachment = New-Object Net.Mail.Attachment($attachmentPath)
+        $message.Attachments.Add($attachment)
+        
+        $smtp.Send($message)
+      shell: pwsh
