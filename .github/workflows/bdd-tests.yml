@@ -78,10 +78,10 @@ jobs:
    #Send Email with BDD
     - name: Send BDD report via email
       run: |
-        $smtpServer = "${{ secrets.SMTP_SERVER }}"
-        $smtpPort = "${{ secrets.SMTP_PORT }}"
-        $smtpUser = "${{ secrets.SMTP_USER }}"
-        $smtpPass = "${{ secrets.SMTP_PASSWORD }}"
+        $smtpServer = "smtp.gmail.com"
+        $smtpPort = "587"
+        $smtpUser = "meghana.anandkumar@gmail.com"
+        $smtpPass = "Bhea@123"
         $from = $smtpServer
         $to = $smtpServer
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
@@ -90,7 +90,7 @@ jobs:
 
         Write-Host "From Address: $from"
         Write-Host "From Address: $to"
-        
+
         $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
         $smtp.EnableSsl = $true
         $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)
