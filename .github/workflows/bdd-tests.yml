@@ -57,12 +57,13 @@ jobs:
         #Extract tags from PR description using jq
         $PR_DESCRIPTION = ($PR_BODY | jq -r .body)
 
+        # Export PR Description to the environment
+        echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
+        echo "PR_DESCRIPTION=$PR_DESCRIPTION" >> $env:GITHUB_ENV
+
         #Log the extracted description
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
         Write-Host "PR Description: $env:PR_DESCRIPTION"
-
-        # Export PR Description to the environment
-        echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
