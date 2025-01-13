@@ -68,4 +68,4 @@ jobs:
       if: env.BDD_TAGS != '' 
       run: |
         echo "Running BDD tests for tags: $BDD_TAGS"
-        npx cucumber-js --tags "${{ env.PR_DESCRIPTION }}" --publish-quiet
+        npx cucumber-js --tags "$PR_DESCRIPTION" --publish-quiet
