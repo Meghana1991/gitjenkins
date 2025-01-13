@@ -40,7 +40,7 @@ jobs:
 
     #Install cucumber
     - name: Install Cucumber
-      run: npm install cucumber-js
+      run: npm install @cucumber/cucumber
       continue-on-error: true
 
     #Get the PR description
