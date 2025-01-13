@@ -85,7 +85,7 @@ jobs:
           smtp-password: ${{ secrets.SMTP_PASSWORD }}
           from: ${{ secrets.SMTP_USER }}
           to: meghana.anandk@gmail.com
-          subject: "BDD Test Results for PR #${{ github.event.pull_request.number }}"
+          subject: "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
           body: |
             Please find the BDD test results
           attachments: cucumber-report.json
