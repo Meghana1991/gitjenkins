@@ -8,6 +8,11 @@ on:
       - opened
       - edited
       - synchronize
+      
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   run-bdd-tests:
     runs-on: windows-latest
@@ -52,9 +57,11 @@ jobs:
 
         # Export PR Description to the environment
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
 
-        #Run BDD Tests with specified tag 
+    #Run BDD Tests with specified tag 
     - name: Run BDD tests
       if: env.BDD_TAGS != '' 
       run: |
