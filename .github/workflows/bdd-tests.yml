@@ -72,7 +72,7 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD $env:PR_DESCRIPTION"
-        npx cucumber-js -t "$env:PR_DESCRIPTION"
+        npx cucumber-js -t "$env:PR_DESCRIPTION" --format json --output cucumber-reports.json
       shell: pwsh
       
    #Send Email with BDD
@@ -86,7 +86,7 @@ jobs:
         $to = "meghana.anandk@gmail.com"
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
-        $attachmentPath = "cucumber-report.json"
+        $attachmentPath = "./cucumber-report.json"
 
         Write-Host "From Address: $from"
         Write-Host "From Address: $to"
