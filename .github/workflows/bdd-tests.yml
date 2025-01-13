@@ -78,12 +78,12 @@ jobs:
    #Send Email with BDD
     - name: Send BDD report via email
       run: |
-        $smtpServer = $env:SMTP_SERVER
-        $smtpPort = $env:SMTP_PORT
-        $smtpUser = $env:SMTP_USER
-        $smtpPass = $env:SMTP_PASSWORD
-        $from = $env:SMTP_USER
-        $to = $env:SMTP_USER
+        $smtpServer = ${{ secrets.SMTP_SERVER }}
+        $smtpPort = ${{ secrets.SMTP_PORT }}
+        $smtpUser = ${{ secrets.SMTP_USER }}
+        $smtpPass = ${{ secrets.SMTP_PASSWORD }}
+        $from = $smtpServer
+        $to = $smtpServer
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
         $attachmentPath = "cucumber-report.json"
