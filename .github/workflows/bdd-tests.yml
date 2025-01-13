@@ -77,7 +77,7 @@ jobs:
       
    #Send Email with BDD
     - name: Send BDD report via email
-      uses: dawidd6/action-send-email@v3
+      uses: mymonero/action-send-email@v1
       with:
           smtp-server: smtp.gmail.com
           smtp-port: 587
