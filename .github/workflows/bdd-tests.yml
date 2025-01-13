@@ -72,14 +72,14 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD $env:PR_DESCRIPTION"
-        npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:cucumber-reports.json
+        npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:output/reports/cucumber-report.json
       shell: pwsh
 
     - name: Upload BDD report
       uses: actions/upload-artifact@v3
       with:
           name: bdd-report
-          path: cucumber-report.json
+          path: output/reports/cucumber-report.json
           
    #Send Email with BDD
     - name: Send BDD report via email
