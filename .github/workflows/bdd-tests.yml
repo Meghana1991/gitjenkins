@@ -77,7 +77,7 @@ jobs:
       
    #Send Email with BDD
     - name: Send BDD report via email
-      uses: mschwarz/send-email@v1
+      uses: dawidd6/action-send-email@v3
       with:
           smtp-server: smtp.gmail.com
           smtp-port: 587
