@@ -71,5 +71,6 @@ jobs:
     #Run BDD Tests with specified tag 
     - name: Run BDD tests
       run: |
-        Write-Host "Running BDD"
-        npx cucumber-js --tags "$PR_DESCRIPTION"
+        Write-Host "Running BDD $env:PR_DESCRIPTION"
+        npx cucumber-js -t "$env:PR_DESCRIPTION"
+      shell: pwsh
