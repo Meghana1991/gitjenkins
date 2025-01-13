@@ -60,7 +60,6 @@ jobs:
         #Log the extracted description
         Write-Host "PR PR_BODY: $PR_BODY"
         Write-Host "PR Description: $PR_DESCRIPTION"
-        Write-Host "PR Description: ${{ env.PR_DESCRIPTION }}"
 
         # Export PR Description to the environment
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -72,4 +71,4 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD"
-        npx cucumber-js --tags $PR_DESCRIPTION
+        npx cucumber-js --tags "$PR_DESCRIPTION"
