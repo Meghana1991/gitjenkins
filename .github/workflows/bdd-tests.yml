@@ -47,7 +47,7 @@ jobs:
         $PR_DESCRIPTION = ($PR_BODY | jq -r .body)
 
         #Log the extracted description
-        Write-Host "PR Description: #PR_DESCRIPTION"
+        Write-Host "PR Description: $PR_DESCRIPTION"
 
         # Export PR Description to the environment
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
