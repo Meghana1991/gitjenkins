@@ -1,3 +1,4 @@
+
 name: Run BDD Test on PR
 
 on:
@@ -8,6 +9,11 @@ on:
       - opened
       - edited
       - synchronize
+      
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   run-bdd-tests:
     runs-on: windows-latest
@@ -19,19 +25,79 @@ jobs:
 
     #Setup Node.js environment
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '14' #Install Node.js
+        node-version: '18' #Install Node.js
 
     #Install Project dependencies
     - name: Install Dependencies
       run: npm install
 
-    #Run BDD Tests with specified tag 
-    - name: Run BDD tests with tags
+    #Install Project dependencies
+    - name: Install jq
+      run: choco install jq
+      continue-on-error: true
+
+    #Install cucumber
+    - name: Install Cucumber
+      run: npm install @cucumber/cucumber
+      continue-on-error: true
+
+    #Get the PR description
+    - name: Get the PR description
+      id: fetch-pr-description
       run: |
-        PR_DESCRIPTION=${curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }})
-        #Extract tags from PR description
-         $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+"
-        npm run test:bdd -- --tags $TAGS
+        # Fetch the PR details using GitHub API
+        $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `
+        "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Error"
+          exit $LASTEXITCODE
+        }
+        #Extract tags from PR description using jq
+        $PR_DESCRIPTION = ($PR_BODY | jq -r .body)
+
+        # Export PR Description to the environment
+        echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
+        echo "PR_DESCRIPTION=$PR_DESCRIPTION" >> $env:GITHUB_ENV
+
+        #Log the extracted description
+        Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
+        Write-Host "PR Description: $env:PR_DESCRIPTION"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: pwsh
+
+    #Run BDD Tests with specified tag 
+    - name: Run BDD tests
+      run: |
+        Write-Host "Running BDD $env:PR_DESCRIPTION"
+        npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:cucumber-reports.json
+      shell: pwsh
+      
+   #Send Email with BDD
+    - name: Send BDD report via email
+      run: |
+        $smtpServer = "smtp.gmail.com"
+        $smtpPort = "587"
+        $smtpUser = "meghana.anandkumar@gmail.com"
+        $smtpPass = "Bhea@123"
+        $from = "meghana.anandkumar@gmail.com"
+        $to = "meghana.anandk@gmail.com"
+        $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
+        $body = "Please find the BDD test results"
+        $attachmentPath = "./cucumber-report.json"
+
+        Write-Host "From Address: $from"
+        Write-Host "From Address: $to"
+ 
+        $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
+        $smtp.EnableSsl = $true
+        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)
+        Write-Host "Attachment Path: $attachmentPath"
+        $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
+        $attachment = New-Object Net.Mail.Attachment($attachmentPath)
+        $message.Attachments.Add($attachment)
+        
+        $smtp.Send($message)
+      shell: pwsh
