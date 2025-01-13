@@ -82,8 +82,8 @@ jobs:
         $smtpPort = "587"
         $smtpUser = "meghana.anandkumar@gmail.com"
         $smtpPass = "Bhea@123"
-        $from = $smtpServer
-        $to = $smtpServer
+        $from = "meghana.anandkumar@gmail.com"
+        $to = "meghana.anandk@gmail.com"
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
         $attachmentPath = "cucumber-report.json"
