@@ -72,4 +72,4 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD"
-        npx cucumber-js --tags "$PR_DESCRIPTION" --publish-quiet
+        npx cucumber-js --tags $PR_DESCRIPTION
