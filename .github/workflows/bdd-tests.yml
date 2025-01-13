@@ -35,3 +35,72 @@ jobs:
         #Extract tags from PR description
          $TAGS = $PR_DESCRIPTION | ConvertFrom-Json | Select-Object -ExpandProperty body | Select-String -Pattern "@\w+"
         npm run test:bdd -- --tags $TAGS
+
+
+name: Run BDD Test on PR
+
+on:
+  pull_request:
+    branches:
+      - main #Trigger only when the PR is made as main branch
+    types:
+      - opened
+      - edited
+      - synchronize
+jobs:
+  run-bdd-tests:
+    runs-on: windows-latest
+
+    steps:
+    #Checkout the pr code
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    #Setup Node.js environment
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14' #Install Node.js
+
+    #Install Project dependencies
+    - name: Install Dependencies
+      run: npm install
+
+    #Install Project dependencies
+    - name: Install jq
+      run: choco install jq
+      continue-on-error: true
+
+    #Get the PR description
+    - name: Get the PR description
+      id: fetch-pr-description
+      run: |
+        # Fetch the PR details using GitHub API
+        $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `"https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"`
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Error"
+          exit $LASTEXITCODE
+        }
+        #Extract tags from PR description using jq
+        $PR_DESCRIPTION = ($PR_BODY | jq -r .body)
+
+        #Log the extracted description
+        Write-Host "PR Description: #PR_DESCRIPTION"
+
+        # Export PR Description to the environment
+        echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
+      shell: pwsh
+
+        #Run BDD Tests with specified tag 
+    - name: Run BDD tests
+      if: env.BDD_TAGS != '' 
+      run: |
+        echo "Running BDD tests for tags: $BDD_TAGS"
+        npx cucumber-js --tags "$BDD_TAGS"
+
+    #Send email with test results
+    - name: Send email with test results
+      if: success()
+      run: |
+      echo "Sending email with BDD test results"
+
