@@ -74,3 +74,21 @@ jobs:
         Write-Host "Running BDD $env:PR_DESCRIPTION"
         npx cucumber-js -t "$env:PR_DESCRIPTION"
       shell: pwsh
+      
+   #Send Email with BDD
+    - name: Send BDD report via email
+      uses: mohd-ashtaq/send-email-action@v1.2
+      with:
+          smtp-server: smtp.gmail.com
+          smtp-port: 587
+          smtp-user: ${{ secrets.SMTP_USER }}
+          smtp-password: ${{ secrets.SMTP_PASSWORD }}
+          from: ${{ secrets.SMTP_USER }}
+          to: meghana.anandk@gmail.com
+          subject: "BDD Test Results for PR #${{ github.event.pull_request.number }}"
+          body: |
+            Please find the BDD test results
+          attachments: cucumber-report.json
+
+
+#
