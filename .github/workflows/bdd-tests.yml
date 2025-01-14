@@ -97,7 +97,7 @@ jobs:
         $to = "meghana.anandk@gmail.com"
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
-        $attachmentPath = "/output/reports/cucumber-report.json"
+        $attachmentPath = ${{ github.workspace }}\output\reports\cucumber-report.json"
         Write-Host "From Address: $from"
         Write-Host "From Address: $to" 
         $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
