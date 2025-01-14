@@ -103,7 +103,7 @@ jobs:
           
     - name: Send BDD report via email
       run: |
-        $smtpServer = "smtp.mail.yahoo.com"
+        $smtpServer = "smtp.gmail.com"
         $smtpPort = 587
         $smtpUser = "meghana.anandkumar@gmail.com"
         $smtpPass = "veavvyynhmfunjsu"
