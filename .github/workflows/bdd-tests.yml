@@ -21,13 +21,13 @@ jobs:
     steps:
     #Checkout the pr code
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     #Setup Node.js environment
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18' #Install Node.js
+        node-version: '20' #Install Node.js
 
     #Install Project dependencies
     - name: Install Dependencies
@@ -72,9 +72,14 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD $env:PR_DESCRIPTION"
+        mkdir -p output/reports
         npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:output/reports/cucumber-report.json
       shell: pwsh
 
+    #List Files for Debugging
+    - name: List Files
+      run: ls -R output/reports
+      
     - name: Upload BDD report
       uses: actions/upload-artifact@v3
       with:
