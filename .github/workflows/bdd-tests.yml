@@ -101,15 +101,33 @@ jobs:
           name: bdd-report
           path: output/reports/cucumber-report.json
           
-   #Send Email with BDD
     - name: Send BDD report via email
-      uses: dawidd6/action-send-email@v1
-      with: 
-        server_address: "smtp.mail.yahoo.com"
-        server_port: 465
-        username: "meghu_coolstar2025@yahoo.com"
-        password: "Bhea@12345678910"        
-        to: "meghana.anandk@gmail.com"
-        subject: "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
-        body: "Please find the BDD test results"
-        attachments: "output/reports/cucumber-report.json"        
+      run: |
+        $smtpServer = "smtp.mail.yahoo.com"
+        $smtpPort = 587
+        $smtpUser = "meghu_coolstar2025@yahoo.com"
+        $smtpPass = "Bhea@12345678910"
+        $from = "meghu_coolstar2025@yahoo.com"
+        $to = "meghana.anandk@gmail.com"
+        $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
+        $body = "Please find the BDD test results"
+        $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.json"
+        $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
+        $smtp.EnableSsl = $true
+        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
+        $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
+        $message.Attachments.Add($attachmentPath)
+        Write-Host "From Address: $($message.From)"
+        Write-Host "To Address: $($message.To)"
+        Write-Host "To Subject: $($message.Subject)"
+        Write-Host "To Body: $($message.Body)"
+        Write-Host "Attachment Path: $attachmentPath"        
+        try {
+          $smtp.Send($message)
+          Write-Host "Email send Successfully"
+        } catch {
+          Write-Host "Failure send emailL $_"
+          exit 1
+        }
+        
+      shell: pwsh
