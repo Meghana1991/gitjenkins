@@ -104,11 +104,11 @@ jobs:
    #Send Email with BDD
     - name: Send BDD report via email
       run: |
-        $smtpServer = "smtp.gmail.com"
-        $smtpPort = 587
-        $smtpUser = "meghana.anandkumar@gmail.com"
-        $smtpPass = "Bhea@123"
-        $from = "meghana.anandkumar@gmail.com"
+        $smtpServer = "smtp.mail.yahoo.com"
+        $smtpPort = 465
+        $smtpUser = "meghu_coolstar2025@yahoo.com"
+        $smtpPass = "Bhea@12345678910"
+        $from = "meghu_coolstar2025@yahoo.com"
         $to = "meghana.anandk@gmail.com"
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
