@@ -97,7 +97,7 @@ jobs:
         $to = "meghana.anandk@gmail.com"
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
         $body = "Please find the BDD test results"
-        $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.json"
+        $attachmentPath = "$env.GITHUB_WORKSPACE\output\reports\cucumber-report.json"
         Write-Host "From Address: $from"
         Write-Host "From Address: $to" 
         Write-Host "Attachment Path: $attachmentPath"
@@ -105,8 +105,7 @@ jobs:
         $smtp.EnableSsl = $true
         $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
         $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
-        $attachment = New-Object Net.Mail.Attachment($attachmentPath)
-        $message.Attachments.Add($attachment)
+        $message.Attachments.Add($attachmentPath)
         
         $smtp.Send($message)
       shell: pwsh
