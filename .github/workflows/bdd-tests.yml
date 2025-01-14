@@ -120,6 +120,13 @@ jobs:
         $smtp.EnableSsl = $true
         $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
         $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
-        $message.Attachments.Add($attachmentPath)        
-        $smtp.Send($message)
+        $message.Attachments.Add($attachmentPath)
+        try {
+          $smtp.Send($message)
+          Write-Host "Email send Successfully"
+        } catch {
+          Write-Host "Failure send emailL $_"
+          exit 1
+        }
+        
       shell: pwsh
