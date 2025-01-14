@@ -82,7 +82,7 @@ jobs:
 
     #List Files for Debugging
     - name: List Files
-      run: ls -R output/reports
+      run: ls -R output
       
     - name: Upload BDD report
       uses: actions/upload-artifact@v3
