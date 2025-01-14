@@ -120,7 +120,6 @@ jobs:
         $smtp.EnableSsl = $true
         $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
         $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
-        $message.Attachments.Add($attachmentPath)
-        
+        $message.Attachments.Add($attachmentPath)        
         $smtp.Send($message)
       shell: pwsh
