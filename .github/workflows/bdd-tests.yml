@@ -80,6 +80,17 @@ jobs:
         npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:output\reports\cucumber-report.json
       shell: pwsh
 
+    #Verify report generation
+    - name: Verify Report Generation
+      run: |
+        $reportPath = "${{ github.workspace }}/output/reports/cucumber-report.json"
+        if (Test-Path $reportPath) {
+          Write-Host "BDD found in location successfully: $reportPath"
+        } else {
+          Write-Host "BDD report not found
+        }
+      shell: pwsh
+
     #List Files for Debugging
     - name: List Files
       run: ls -R output
