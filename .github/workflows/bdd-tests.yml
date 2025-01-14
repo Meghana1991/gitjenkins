@@ -116,12 +116,10 @@ jobs:
         $smtp.EnableSsl = $true
         $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
         $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
-        $message.Attachments.Add($attachmentPath)
         Write-Host "From Address: $($message.From)"
         Write-Host "To Address: $($message.To)"
         Write-Host "To Subject: $($message.Subject)"
         Write-Host "To Body: $($message.Body)"
-        Write-Host "Attachment Path: $attachmentPath"        
         try {
           $smtp.Send($message)
           Write-Host "Email send Successfully"
