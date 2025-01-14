@@ -100,10 +100,10 @@ jobs:
         $attachmentPath = ${{ github.workspace }}\output\reports\cucumber-report.json"
         Write-Host "From Address: $from"
         Write-Host "From Address: $to" 
+        Write-Host "Attachment Path: $attachmentPath"
         $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
         $smtp.EnableSsl = $true
-        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)
-        Write-Host "Attachment Path: $attachmentPath"
+        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
         $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
         $attachment = New-Object Net.Mail.Attachment($attachmentPath)
         $message.Attachments.Add($attachment)
