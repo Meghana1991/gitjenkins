@@ -87,7 +87,7 @@ jobs:
         if (Test-Path $reportPath) {
           Write-Host "BDD found in location successfully: $reportPath"
         } else {
-          Write-Host "BDD report not found
+          Write-Host "BDD report not found"
         }
       shell: pwsh
 
