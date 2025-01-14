@@ -77,7 +77,7 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD $env:PR_DESCRIPTION"
-        npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:output/reports/cucumber-report.json
+        npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:output\reports\cucumber-report.json
       shell: pwsh
 
     #List Files for Debugging
