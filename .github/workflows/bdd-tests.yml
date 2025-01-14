@@ -68,11 +68,15 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
 
+    - name: Create output directory
+      run: |
+        New-Item -ItemType Directory -Path "${{ github.workspace }}\output\reports" -Force
+      shell: pwsh
+      
     #Run BDD Tests with specified tag 
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD $env:PR_DESCRIPTION"
-        mkdir -p output/reports
         npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:output/reports/cucumber-report.json
       shell: pwsh
 
