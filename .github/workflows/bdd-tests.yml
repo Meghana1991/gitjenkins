@@ -120,6 +120,7 @@ jobs:
         Write-Host "To Address: $($message.To)"
         Write-Host "To Subject: $($message.Subject)"
         Write-Host "To Body: $($message.Body)"
+        Write-Host "Attachment Path: $attachmentPath"        
         try {
           $smtp.Send($message)
           Write-Host "Email send Successfully"
