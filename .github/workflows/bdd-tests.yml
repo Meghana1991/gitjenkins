@@ -83,7 +83,7 @@ jobs:
     #Verify report generation
     - name: Verify Report Generation
       run: |
-        $reportPath = "${{ github.workspace }}/output/reports/cucumber-report.json"
+        $reportPath = "${{ github.workspace }}\output\reports\cucumber-report.json"
         if (Test-Path $reportPath) {
           Write-Host "BDD found in location successfully: $reportPath"
         } else {
