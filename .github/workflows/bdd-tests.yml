@@ -107,7 +107,7 @@ jobs:
         $smtpServer = "smtp.gmail.com"
         $smtpPort = 587
         $smtpUser = "meghana.anandkumar@gmail.com"
-        $smtpPass = "veavvyynhmfunjsu"
+        $smtpPass = "${{ secrets.SMTP_PASS }}"
         $from = "meghana.anandkumar@gmail.com"
         $to = "meghana.anandk@gmail.com"
         $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
