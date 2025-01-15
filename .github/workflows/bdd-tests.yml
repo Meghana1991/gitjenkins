@@ -75,7 +75,7 @@ jobs:
         npx cucumber-js -t "$env:PR_DESCRIPTION" --format json:cucumber-reports.json
       shell: pwsh
       
-   #Send Email with BDD
+   #Send Email with BDD reports
     - name: Send BDD report via email
       run: |
         $smtpServer = "smtp.gmail.com"
