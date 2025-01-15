@@ -101,6 +101,7 @@ jobs:
           name: bdd-report
           path: output/reports/cucumber-report.html
           
+   #Send Email with BDD reports
     - name: Send BDD report via email
       run: |
         $smtpServer = "smtp.gmail.com"
