@@ -62,9 +62,9 @@ jobs:
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" >> $env:GITHUB_ENV
 
         $pattern = "(?<=#BDD_TAG:).*" 
-        $matches = Select-String -InputObject "{{ env.PR_BODY }}" -Pattern $pattern
+        $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
         if ($matches -ne $null){
-          echo "BDD_TAGS=$($matches.Matches.Value -join ',')" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "BDD_TAGS=$($matches.Matches.Value -replace ' ',',')" | Out-File -FilePath $env:GITHUB_ENV -Append
         }else{
           echo "BDD_TAGS=none" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
