@@ -61,6 +61,13 @@ jobs:
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Append
         echo "PR_DESCRIPTION=$PR_DESCRIPTION" >> $env:GITHUB_ENV
 
+        $pattern = "(?<=#BDD_TAG:).*" 
+        $matches = Select-String -InputObject "{{ env.PR_BODY }}" -Pattern $pattern
+        if ($matches -ne $null){
+          echo "BDD_TAGS=$($matches.Matches.Value -join ',')" | Out-File -FilePath $env:GITHUB_ENV -Append
+        }else{
+          echo "BDD_TAGS=none" | Out-File -FilePath $env:GITHUB_ENV -Append
+        }
         
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
         Write-Host "PR BDD_TAGS: $BDD_TAGS"
