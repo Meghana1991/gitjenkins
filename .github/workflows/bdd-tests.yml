@@ -63,6 +63,8 @@ jobs:
 
         $pattern = "(?<=BDD_TAGS: ).*" 
         $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
+        echo "matches=$matches" | Out-File -FilePath $env:GITHUB_ENV -Append
+        echo "matches=$matches" >> $env:GITHUB_ENV
 
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
         Write-Host "BDD_TAGS here: $BDD_TAGS"
@@ -80,8 +82,7 @@ jobs:
     #Run BDD Tests with specified tag 
     - name: Run BDD tests
       run: |
-        Write-Host "Running BDD $env:PR_DESCRIPTION"
-        Write-Host "matches here: $matches"
+        Write-Host "Running BDD $env:matches"
         npx cucumber-js -t "$env:PR_DESCRIPTION" --format html:output\reports\cucumber-report.html
       shell: pwsh
 
