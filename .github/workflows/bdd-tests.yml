@@ -95,6 +95,13 @@
       #List Files for Debugging
       - name: List Files
         run: ls -R output
+
+    #upload BDD Test Report 
+      - name: Upload BDD Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: BDD-Test-Report
+          path: output/reports/cucumber-report.html
                   
      #Send Email with BDD reports
       - name: Send BDD report via email
