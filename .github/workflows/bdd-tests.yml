@@ -96,7 +96,7 @@ jobs:
       run: ls -R output
       
     - name: Upload BDD report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.1.2
       with:
           name: bdd-report
           path: output/reports/cucumber-report.html
