@@ -69,7 +69,6 @@ jobs:
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
         Write-Host "BDD_TAGS here: $BDD_TAGS"
         Write-Host "matches here: $matches"
-        Write-Host "BDD_TAGS: $env:BDD_TAGS"
 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,6 +83,7 @@ jobs:
     - name: Run BDD tests
       run: |
         Write-Host "Running BDD $env:PR_DESCRIPTION"
+        Write-Host "matches here: $matches"
         npx cucumber-js -t "$env:PR_DESCRIPTION" --format html:output\reports\cucumber-report.html
       shell: pwsh
 
