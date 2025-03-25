@@ -76,7 +76,7 @@
       #Run BDD Tests with specified tag 
       - name: Run BDD tests
         run: |
-          Write-Host "Running BDD $env:BDD_TAGS"
+          Write-Host "Running BDDs $env:BDD_TAGS"
           Write-Host "Running BDD ${{ env.BDD_TAGS }}"
           npx cucumber-js -t "$env:PR_DESCRIPTION" --format html:output\reports\cucumber-report.html
         shell: pwsh
