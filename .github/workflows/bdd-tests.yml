@@ -98,7 +98,7 @@
 
     #upload BDD Test Report 
       - name: Upload BDD Test Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: BDD-Test-Report
           path: output/reports/cucumber-report.html
