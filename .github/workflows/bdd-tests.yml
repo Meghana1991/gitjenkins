@@ -98,33 +98,32 @@
         
             
      #Send Email with BDD reports
-      - name: Send BDD report via email
-        run: |
-          $smtpServer = "smtp.gmail.com"
-          $smtpPort = 587
-          $smtpUser = "meghana.anandkumar@gmail.com"
-          $smtpPass = "${{ secrets.SMTP_PASS }}"
-          $from = "meghana.anandkumar@gmail.com"
-          $to = "meghana.anandk@gmail.com"
-          $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
-          $body = "Please find the BDD test results"
-          $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
-          $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
-          $smtp.EnableSsl = $true
-          $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
-          $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
-          $message.Attachments.Add($attachmentPath)
-          Write-Host "From Address: $($message.From)"
-          Write-Host "To Address: $($message.To)"
-          Write-Host "To Subject: $($message.Subject)"
-          Write-Host "To Body: $($message.Body)"
-          Write-Host "Attachment Path: $attachmentPath"        
-          try {
-            $smtp.Send($message)
-            Write-Host "Email send Successfully"
-          } catch {
-            Write-Host "Failure send emailL $_"
-            exit 1
-          }
-          
-        shell: pwsh
+- name: Send BDD report via email
+      run: |
+        $smtpServer = "smtp.mail.yahoo.com"
+        $smtpPort = 587
+        $smtpUser = "meghana.anandkumar@gmail.com"
+        $smtpPass = "vkigjypccxfyxpcg"
+        $from = "meghana.anandkumar@gmail.com"
+        $to = "meghana.anandk@gmail.com"
+        $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
+        $body = "Please find the BDD test results"
+        $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.json"
+        $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
+        $smtp.EnableSsl = $true
+        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
+        $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
+        Write-Host "From Address: $($message.From)"
+        Write-Host "To Address: $($message.To)"
+        Write-Host "To Subject: $($message.Subject)"
+        Write-Host "To Body: $($message.Body)"
+        Write-Host "Attachment Path: $attachmentPath"        
+        try {
+          $smtp.Send($message)
+          Write-Host "Email send Successfully"
+        } catch {
+          Write-Host "Failure send emailL $_"
+          exit 1
+        }
+        
+      shell: pwsh
