@@ -101,9 +101,9 @@
         run: |
           $smtpServer = "smtp.mail.yahoo.com"
           $smtpPort = 587
-          $smtpUser = "meghana.anandkumar@gmail.com"
+          $smtpUser = "meghu_coolstar2025@yahoo.com"
           $smtpPass = "vkigjypccxfyxpcg"
-          $from = "meghana.anandkumar@gmail.com"
+          $from = "meghu_coolstar2025@yahoo.com"
           $to = "meghana.anandk@gmail.com"
           $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
           $body = "Please find the BDD test results"
