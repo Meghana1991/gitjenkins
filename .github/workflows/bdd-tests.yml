@@ -78,13 +78,13 @@
         run: |
           Write-Host "Running BDDs $env:BDD_TAGS"
           Write-Host "Running BDD ${{ env.BDD_TAGS }}"
-          npx cucumber-js -t "$env:BDD_TAGS" --format html:output\reports\cucumber-report.html
+          npx cucumber-js -t "$env:BDD_TAGS" --format html:output/reports/cucumber-report.html
         shell: pwsh
   
       #Verify report generation
       - name: Verify Report Generation
         run: |
-          $reportPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
+          $reportPath = "${{ github.workspace }}/output/reports/cucumber-report.html"
           if (Test-Path $reportPath) {
             Write-Host "BDD found in location successfully: $reportPath"
           } else {
@@ -101,7 +101,7 @@
         uses: actions/upload-artifact@v4
         with:
           name: BDD-Test-Report
-          path: output/reports/cucumber-report.html
+          path: output\reports\cucumber-report.html
                   
      #Send Email with BDD reports
       - name: Send BDD report via email
@@ -114,7 +114,7 @@
           $to = "meghana.anandk@gmail.com"
           $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
           $body = "Please find the BDD test results"
-          $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.json"
+          $attachmentPath = "${{ github.workspace }}/output/reports/cucumber-report.json"
           $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
           $smtp.EnableSsl = $true
           $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
