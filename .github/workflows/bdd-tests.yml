@@ -63,12 +63,14 @@ jobs:
 
         $pattern = "(?<=BDD_TAGS: ).*" 
         $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
+        echo "BDD_TAGS=$matches" | Out-File -FilePath $env:GITHUB_ENV -Append
         echo "BDD_TAGS=$matches" >> $env:GITHUB_ENV
-        
+
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
+        Write-Host "BDD_TAGS here: $BDD_TAGS"
         Write-Host "matches here: $matches"
-        Write-Host "BDD_TAGS: ${{ env.BDD_TAGS }}"  
-        Write-Host "BDD_TAGS here: BDD_TAGS"  
+        Write-Host "BDD_TAGS: $env:BDD_TAGS"
+
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
