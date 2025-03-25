@@ -70,7 +70,6 @@ jobs:
         }
         
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
-        Write-Host "BDD_TAGS here: $BDD_TAGS"
         Write-Host "matches here: $matches"
         Write-Host "BDD_TAGS: ${{ env.BDD_TAGS }}"  
       env:
