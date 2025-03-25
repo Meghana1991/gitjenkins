@@ -1,4 +1,4 @@
-Feature: Simple Calculator Operation
+Feature: Simple Calculator Operation.
 
 @testcalculator
 Scenario: Add two numbers
