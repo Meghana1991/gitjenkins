@@ -1,128 +1,130 @@
-
-name: Run BDD Test on PR
-
-on:
-  pull_request:
-    branches:
-      - main #Trigger only when the PR is made as main branch
-    types:
-      - opened
-      - edited
-      - synchronize
-      
-permissions: 
-  contents: read
-  pull-requests: write
-
-jobs:
-  run-bdd-tests:
-    runs-on: windows-latest
-
-    steps:
-    #Checkout the pr code
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    #Setup Node.js environment
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20' #Install Node.js
-
-    #Install Project dependencies
-    - name: Install Dependencies
-      run: npm install
-
-    #Install Project dependencies
-    - name: Install jq
-      run: choco install jq
-      continue-on-error: true
-
-    #Install cucumber
-    - name: Install Cucumber
-      run: npm install @cucumber/cucumber
-      continue-on-error: true
-
-    #Get the PR description
-    - name: Get the PR description
-      id: fetch-pr-description
-      run: |
-        # Fetch the PR details using GitHub API
-        $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `
-        "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"
-        if ($LASTEXITCODE -ne 0) {
-          Write-Host "Error"
-          exit $LASTEXITCODE
-        }
-        #Extract tags from PR description using jq
-        $pattern = "(?<=BDD_TAGS: ).*" 
-        $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
-        echo "BDD_TAGS=$matches" | Out-File -FilePath $env:GITHUB_ENV -Append
-        Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
-        Write-Host "BDD_TAGS here: $BDD_TAGS"
-        Write-Host "matches here: $matches"
-
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      shell: pwsh
-
-    - name: Create output directory
-      run: |
-        New-Item -ItemType Directory -Path "${{ github.workspace }}\output\reports" -Force
-      shell: pwsh
-      
-    #Run BDD Tests with specified tag 
-    - name: Run BDD tests
-      run: |
-        Write-Host "Running BDD $env:BDD_TAGS"
-        Write-Host "Running BDD ${{ env.BDD_TAGS }}"
-        npx cucumber-js -t "$env:PR_DESCRIPTION" --format html:output\reports\cucumber-report.html
-      shell: pwsh
-
-    #Verify report generation
-    - name: Verify Report Generation
-      run: |
-        $reportPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
-        if (Test-Path $reportPath) {
-          Write-Host "BDD found in location successfully: $reportPath"
-        } else {
-          Write-Host "BDD report not found"
-        }
-      shell: pwsh
-
-    #List Files for Debugging
-    - name: List Files
-      run: ls -R output
-      
-          
-   #Send Email with BDD reports
-    - name: Send BDD report via email
-      run: |
-        $smtpServer = "smtp.gmail.com"
-        $smtpPort = 587
-        $smtpUser = "meghana.anandkumar@gmail.com"
-        $smtpPass = "${{ secrets.SMTP_PASS }}"
-        $from = "meghana.anandkumar@gmail.com"
-        $to = "meghana.anandk@gmail.com"
-        $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
-        $body = "Please find the BDD test results"
-        $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
-        $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
-        $smtp.EnableSsl = $true
-        $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
-        $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
-        $message.Attachments.Add($attachmentPath)
-        Write-Host "From Address: $($message.From)"
-        Write-Host "To Address: $($message.To)"
-        Write-Host "To Subject: $($message.Subject)"
-        Write-Host "To Body: $($message.Body)"
-        Write-Host "Attachment Path: $attachmentPath"        
-        try {
-          $smtp.Send($message)
-          Write-Host "Email send Successfully"
-        } catch {
-          Write-Host "Failure send emailL $_"
-          exit 1
-        }
+  
+  name: Run BDD Test on PR
+  
+  on:
+    pull_request:
+      branches:
+        - main #Trigger only when the PR is made as main branch
+      types:
+        - opened
+        - edited
+        - synchronize
         
-      shell: pwsh
+  permissions: 
+    contents: read
+    pull-requests: write
+  
+  jobs:
+    run-bdd-tests:
+      runs-on: windows-latest
+  
+      steps:
+      #Checkout the pr code
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      #Setup Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' #Install Node.js
+  
+      #Install Project dependencies
+      - name: Install Dependencies
+        run: npm install
+  
+      #Install Project dependencies
+      - name: Install jq
+        run: choco install jq
+        continue-on-error: true
+  
+      #Install cucumber
+      - name: Install Cucumber
+        run: npm install @cucumber/cucumber
+        continue-on-error: true
+  
+      #Get the PR description
+      - name: Get the PR description
+        id: fetch-pr-description
+        run: |
+          # Fetch the PR details using GitHub API
+          $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Error"
+            exit $LASTEXITCODE
+          }
+          #Extract tags from PR description using jq
+          $pattern = "(?<=BDD_TAGS: ).*" 
+          $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
+          if ($matches -ne null) {
+            $tags = $matches.Matches.Value.trim() -replace ' ',','          
+            echo "BDD_TAGS=$tags" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
+            Write-Host "BDD_TAGS here: $BDD_TAGS"
+            Write-Host "matches here: $matches" 
+          } 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+  
+      - name: Create output directory
+        run: |
+          New-Item -ItemType Directory -Path "${{ github.workspace }}\output\reports" -Force
+        shell: pwsh
+        
+      #Run BDD Tests with specified tag 
+      - name: Run BDD tests
+        run: |
+          Write-Host "Running BDD $env:BDD_TAGS"
+          Write-Host "Running BDD ${{ env.BDD_TAGS }}"
+          npx cucumber-js -t "$env:PR_DESCRIPTION" --format html:output\reports\cucumber-report.html
+        shell: pwsh
+  
+      #Verify report generation
+      - name: Verify Report Generation
+        run: |
+          $reportPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
+          if (Test-Path $reportPath) {
+            Write-Host "BDD found in location successfully: $reportPath"
+          } else {
+            Write-Host "BDD report not found"
+          }
+        shell: pwsh
+  
+      #List Files for Debugging
+      - name: List Files
+        run: ls -R output
+        
+            
+     #Send Email with BDD reports
+      - name: Send BDD report via email
+        run: |
+          $smtpServer = "smtp.gmail.com"
+          $smtpPort = 587
+          $smtpUser = "meghana.anandkumar@gmail.com"
+          $smtpPass = "${{ secrets.SMTP_PASS }}"
+          $from = "meghana.anandkumar@gmail.com"
+          $to = "meghana.anandk@gmail.com"
+          $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
+          $body = "Please find the BDD test results"
+          $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
+          $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
+          $smtp.EnableSsl = $true
+          $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
+          $message = New-Object Net.Mail.MailMessage($from, $to, $subject, $body)
+          $message.Attachments.Add($attachmentPath)
+          Write-Host "From Address: $($message.From)"
+          Write-Host "To Address: $($message.To)"
+          Write-Host "To Subject: $($message.Subject)"
+          Write-Host "To Body: $($message.Body)"
+          Write-Host "Attachment Path: $attachmentPath"        
+          try {
+            $smtp.Send($message)
+            Write-Host "Email send Successfully"
+          } catch {
+            Write-Host "Failure send emailL $_"
+            exit 1
+          }
+          
+        shell: pwsh
