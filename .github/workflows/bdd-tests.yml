@@ -70,9 +70,9 @@ jobs:
         }
         
         Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
-        Write-Host "PR BDD_TAGS: $BDD_TAGS"
+        Write-Host "BDD_TAGS: $BDD_TAGS"
         Write-Host "PR Description: $env:PR_DESCRIPTION"
-        Write-Host "BDD_TAGS Description: $env:BDD_TAGS"  
+        Write-Host "BDD_TAGS: $env:BDD_TAGS"  
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
