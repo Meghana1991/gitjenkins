@@ -70,7 +70,7 @@
   
       - name: Create output directory
         run: |
-          New-Item -ItemType Directory -Path "${{ github.workspace }}\output\reports" -Force
+          New-Item -ItemType Directory -Path "${{ github.workspace }}/output/reports" -Force
         shell: pwsh
         
       #Run BDD Tests with specified tag 
