@@ -95,12 +95,6 @@ jobs:
     - name: List Files
       run: ls -R output
       
-    - name: Upload BDD report
-      uses: actions/upload-artifact@v3.1.2
-      with:
-          name: bdd-report
-          path: output/reports/cucumber-report.html
-          
    #Send Email with BDD reports
     - name: Send BDD report via email
       run: |
