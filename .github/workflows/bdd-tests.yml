@@ -114,7 +114,7 @@
           $to = "meghana.anandk@gmail.com"
           $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
           $body = "Please find the BDD test results"
-          $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.json"
+          $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
           $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort)
           $smtp.EnableSsl = $true
           $smtp.Credentials = New-Object System.Net.NetworkCredential($smtpUser, $smtpPass)        
