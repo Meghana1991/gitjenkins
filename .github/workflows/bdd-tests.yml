@@ -106,12 +106,12 @@
      #Send Email with BDD reports
       - name: Send BDD report via email
         run: |
-          $smtpServer = "smtp.gmail.com"
-          $smtpPort = "587"
+          $smtpServer = "${{ secrets.SMTP_SERVER }}"
+          $smtpPort = "${{ secrets.SMTP_PORT }}"
           $smtpUser = "${{ secrets.SMTP_USER }}"
           $smtpPass = "${{ secrets.SMTP_PASS }}"
-          $from = "manjucloud1991@gmail.com"
-          $to = "manjucloud1991@gmail.com"
+          $from = "${{ secrets.EMAIL_ADDRESS }}"
+          $to = "${{ secrets.EMAIL_ADDRESS }}"
           $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
           $body = "Please find the BDD test results"
           $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
