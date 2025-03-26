@@ -107,7 +107,7 @@
       - name: Send BDD report via email
         run: |
           $smtpServer = "smtp.gmail.com"
-          $smtpPort = 587
+          $smtpPort = "587"
           $smtpUser = "manjucloud1991@gmail.com"
           $smtpPass = "recvfonruyacsfrr"
           $from = "manjucloud1991@gmail.com"
