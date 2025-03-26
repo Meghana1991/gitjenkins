@@ -108,8 +108,8 @@
         run: |
           $smtpServer = "smtp.gmail.com"
           $smtpPort = "587"
-          $smtpUser = "manjucloud1991@gmail.com"
-          $smtpPass = "recvfonruyacsfrr"
+          $smtpUser = "${{ secrets.SMTP_USER }}"
+          $smtpPass = "${{ secrets.SMTP_PASS }}"
           $from = "manjucloud1991@gmail.com"
           $to = "manjucloud1991@gmail.com"
           $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
