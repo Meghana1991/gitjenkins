@@ -1,4 +1,4 @@
-Feature: Simple Calculator Operations
+Feature: Simple Calculator Operations in Landing page
 
 @testcalculator
 Scenario: Add two numbers
