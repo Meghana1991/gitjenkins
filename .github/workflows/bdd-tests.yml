@@ -111,7 +111,7 @@
           $smtpUser = "manjucloud1991@gmail.com"
           $smtpPass = "recvfonruyacsfrr"
           $from = "manjucloud1991@gmail.com"
-          $to = "meghana.anandk@gmail.com"
+          $to = "manjucloud1991@gmail.com"
           $subject = "BDD Test  Results for PR #${{ github.event.pull_request.number }}"
           $body = "Please find the BDD test results"
           $attachmentPath = "${{ github.workspace }}\output\reports\cucumber-report.html"
