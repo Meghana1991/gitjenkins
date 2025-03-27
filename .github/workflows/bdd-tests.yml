@@ -56,12 +56,10 @@
           }
           #Extract tags from PR description using jq
           $pattern = "(?<=BDD_TAGS:\s*)@[a-zA-Z0-9_-]+(?:\s+@[a-zA-Z0-9_-]+)*" 
-          $formatted = if ($PR_BODY -match $pattern) { $matches[0] } else { "" }
-          if ($formatted -ne "") {
-            $tags = $formatted -replace '\s+', ' or '          
-            echo "BDD_TAGS=$tags" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            Write-Host "BDD_TAGS here: $BDD_TAGS"
-          } 
+          $tags = $pattern -replace '\s+', ' or '          
+          echo "BDD_TAGS=$tags" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "BDD_TAGS here: $BDD_TAGS"
+          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: pwsh
