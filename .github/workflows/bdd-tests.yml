@@ -5,6 +5,7 @@
     pull_request:
       branches:
         - main #Trigger only when the PR is made as main branch
+        - scenario2
       types:
         - opened
         - edited
