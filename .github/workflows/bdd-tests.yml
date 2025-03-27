@@ -55,12 +55,12 @@
             exit $LASTEXITCODE
           }
           #Extract tags from PR description using jq
-          $pattern = "(?<=BDD_TAGS: ).*" 
+          $pattern = "(?<=BDD_TAGS:\s*)@[a-zA-Z0-9_-]+(?:\s+@[a-zA-Z0-9_-]+)*" 
           $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
           if ($matches -ne $null) {
-            $tags = $matches.Matches.Value.trim() -replace ' ',','          
+            $tags = $matches -replace '\s+', ' or '          
             echo "BDD_TAGS=$tags" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            Write-Host "PR PR_DESCRIPTION: $PR_DESCRIPTION"
+            Write-Host "PR tags: $tags"
             Write-Host "BDD_TAGS here: $BDD_TAGS"
             Write-Host "matches here: $matches" 
           } 
