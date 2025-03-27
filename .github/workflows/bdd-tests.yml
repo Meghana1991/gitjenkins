@@ -55,7 +55,7 @@
             exit $LASTEXITCODE
           }
           #Extract tags from PR description using jq
-          $pattern = "(?<=BDD_TAGS: ).*" | tr '\n' ' ' | sed 's/ / or /g')
+          $pattern = "(?<=BDD_TAGS: ).*" | tr '\n' ' ' | sed 's/ / or /g'
           $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
           if ($matches -ne $null) {
             $tags = $matches.Matches.Value.trim() -replace ' ',','          
