@@ -55,7 +55,7 @@
             exit $LASTEXITCODE
           }
           #Extract tags from PR description using jq
-          $pattern = "(?<=BDD_TAGS: ).*" 
+          $pattern = "(?<=BDD_TAGS: ).*" | tr '\n' ' ' | sed 's/ / or /g')
           $matches = Select-String -InputObject "${{ github.event.pull_request.body }}" -Pattern $pattern
           if ($matches -ne $null) {
             $tags = $matches.Matches.Value.trim() -replace ' ',','          
@@ -78,7 +78,7 @@
         run: |
           Write-Host "Running BDDs $env:BDD_TAGS"
           Write-Host "Running BDD ${{ env.BDD_TAGS }}"
-          npx cucumber-js -t "$env:BDD_TAGS" --format html:output\reports\cucumber-report.html
+          npx cucumber-js --tags "$env:BDD_TAGS" --format html:output\reports\cucumber-report.html
         shell: pwsh
   
       #Verify report generation
