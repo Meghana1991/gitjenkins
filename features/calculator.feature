@@ -1,4 +1,4 @@
-Feature: Simple Calculator Operations.
+Feature: Simple Calculator Operations in Landing page
 
 @mul
 Scenario: Multiply two numbers
