@@ -47,17 +47,14 @@
       - name: Get the PR description
         id: fetch-pr-description
         run: |
-          # Fetch the PR details using GitHub API
-          $PR_BODY = curl -s -H "Authorization: Bearer $env:GITHUB_TOKEN" `
-          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}"
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "Error"
-            exit $LASTEXITCODE
-          }
+          # Fetch the PR details using GitHub API          
           #Extract tags from PR description using jq
-          $pattern = "(?<=BDD_TAGS:\s*)@[a-zA-Z0-9_-]+(?:\s+@[a-zA-Z0-9_-]+)*" 
-          $tags = $pattern -replace '\s+', ' or '          
-          echo "BDD_TAGS=$tags" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          if("${{ env.PR_DESCRIPTION }}" -match "(?<=BDD_TAGS:\s*)@[a-zA-Z0-9_-]+(?:\s+@[a-zA-Z0-9_-]+)*)") {
+            echo "BDD_TAGS=$matches[0]" >> $env:GITHUB_ENV
+          }else{
+            echo "No BDD tags Found"
+            exit 1
+          }
           Write-Host "BDD_TAGS here: $BDD_TAGS"
           
         env:
