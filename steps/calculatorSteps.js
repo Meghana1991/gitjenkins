@@ -4,7 +4,7 @@ const Calculator = require('../calculator')
 let calculator;
 let result;
 
-const assert = require('assert') 
+const assert = require('assert')
 
 Given('the calculator is initialized', function () {
     calculator = new Calculator()
@@ -17,6 +17,10 @@ Then('the result should be {int}', function (expectedResult) {
 });
 
 
-When('I add {int} and {int}', function (a,b) {
+When('I add {int} and {int}', function (a, b) {
     result = calculator.add(a, b)
+})
+
+When('I mul {int} and {int}', function (a, b) {
+    result = calculator.mul(a, b)
 })
